@@ -16,5 +16,15 @@ export default async function decorate(block) {
   const footer = document.createElement('div');
   while (fragment.firstElementChild) footer.append(fragment.firstElementChild);
 
+  // decorate icons
+  const icons = footer.querySelectorAll('.icon img[src]');
+  icons.forEach(async (icon) => {
+    const resp = await fetch(icon.src);
+    const temp = document.createElement('div');
+    temp.innerHTML = await resp.text();
+    const svg = temp.querySelector('svg');
+    icon.replaceWith(svg);
+  });
+
   block.append(footer);
 }

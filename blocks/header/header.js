@@ -102,7 +102,7 @@ export default async function decorate(block) {
   nav.id = 'nav';
   while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
 
-  const classes = ['brand', 'sections', 'tools'];
+  const classes = ['brand', 'sections', 'tools', 'location-finder', 'language-picker', 'alert', 'support'];
   classes.forEach((c, i) => {
     const section = nav.children[i];
     if (section) section.classList.add(`nav-${c}`);
@@ -126,6 +126,20 @@ export default async function decorate(block) {
           navSection.setAttribute('aria-expanded', expanded ? 'false' : 'true');
         }
       });
+    });
+  }
+
+  const navTools = nav.querySelector('.nav-tools');
+  if (navTools) {
+    navTools.querySelectorAll('a[href]').forEach((a) => {
+      a.classList.add('button');
+      const icon = a.querySelector('.icon');
+      const text = a.textContent.trim();
+      const label = document.createElement('span');
+      label.className = 'label';
+      label.textContent = text;
+      a.innerHTML = '';
+      a.append(icon, label);
     });
   }
 

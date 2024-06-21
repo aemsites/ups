@@ -1,6 +1,8 @@
+/* stylelint-disable no-descending-specificity */
 footer {
   padding: 2rem;
-  background-color: var(--light-color);
+  background-color: var(--brown);
+  color: var(--tan);
   font-size: var(--body-font-size-s);
 }
 
@@ -12,3 +14,48 @@ footer .footer {
 footer .footer p {
   margin: 0;
 }
+
+footer .footer a:any-link {
+  color: var(--tan);
+}
+
+footer .footer .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin-right: 2ch;
+  border: 1px solid;
+  border-radius: 50%;
+}
+
+footer .footer svg {
+  width: 0.6rem;
+  height: 0.6rem;
+  fill: currentcolor;
+}
+
+footer .footer ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+footer .footer ul > li {
+  margin: 22px 0;
+  color: white;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+footer .footer ul > li > ul > li {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+footer .footer ul li a {
+  display: block;
+  padding: 22px 0;
+}
+
