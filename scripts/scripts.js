@@ -3,7 +3,7 @@ import {
   buildBlock,
   loadHeader,
   loadFooter,
-  decorateButtons,
+  // decorateButtons,
   decorateIcons,
   decorateSections,
   decorateBlocks,
@@ -56,6 +56,36 @@ function buildAutoBlocks(main) {
 }
 
 /**
+ * Decorates links with appropriate classes to style them as buttons
+ * @param {HTMLElement} main The main container element
+ */
+function decorateButtons(main) {
+  main.querySelectorAll('p a[href]').forEach((a) => {
+    a.title = a.title || a.textContent;
+    const p = a.closest('p');
+    // identify standalone links
+    if (a.href !== a.textContent && p.textContent === a.textContent) {
+      a.className = 'button';
+      const strong = a.closest('strong');
+      const em = a.closest('em');
+      const double = !!strong && !!em;
+      if (double) a.classList.add('accent');
+      else if (strong) a.classList.add('emphasis');
+      else if (em) a.classList.add('outline');
+      p.innerHTML = a.outerHTML;
+      p.className = 'button-wrapper';
+    }
+  });
+}
+
+function decorateImages(main) {
+  main.querySelectorAll('p img').forEach((img) => {
+    const p = img.closest('p');
+    p.className = 'img-wrapper';
+  });
+}
+
+/**
  * Decorates the main element.
  * @param {Element} main The main element
  */
@@ -63,6 +93,7 @@ function buildAutoBlocks(main) {
 export function decorateMain(main) {
   // hopefully forward compatible button decoration
   decorateButtons(main);
+  decorateImages(main);
   decorateIcons(main);
   buildAutoBlocks(main);
   decorateSections(main);
