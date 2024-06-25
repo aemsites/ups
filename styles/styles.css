@@ -93,7 +93,7 @@ header {
 
 /* sections */
 main > .section {
- padding: 1.5rem;
+ padding-inline: 1.5rem;
  margin-block: 5rem;
 }
 
