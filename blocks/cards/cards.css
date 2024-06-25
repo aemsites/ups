@@ -2,19 +2,27 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(278px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 3.5rem 1.75rem;
 }
 
 .cards > ul > li {
-  border-radius: .25rem;
+  flex: 1 1 312px;
+  border-radius: 0.25rem;
   background-color: var(--background-color);
   box-shadow: 0 4px 12px -3px rgba(0 0 0 / 5.1%), 0 2px 5px 0 rgba(0 0 0 / 14.1%);
 }
 
+@media (width >= 700px) {
+  .cards > ul > li {
+    max-width: 312px;
+  }
+}
+
 .cards .cards-card-body {
-  margin: 24px;
+  margin: 1.5rem;
 }
 
 .cards .cards-card-body h3 {
@@ -24,6 +32,7 @@
 
 .cards .cards-card-body .button {
   margin: 0;
+  border: 0;
   padding: 0;
   background-color: transparent;
   color: var(--link-color);
