@@ -2,8 +2,8 @@
 Your project's description...
 
 ## Environments
-- Preview: https://main--ups--aemsites.hlx.page/
-- Live: https://main--ups--aemsites.hlx.live/
+- Preview: https://main--ups--aemsites.aem.page/
+- Live: https://main--ups--aemsites.aem.live/
 
 ## Installation
 

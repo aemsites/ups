@@ -17,7 +17,7 @@
   "bugs": {
     "url": "https://github.com/aemsites/ups/issues"
   },
-  "homepage": "https://main--ups--aemsites.hlx.live",
+  "homepage": "https://main--ups--aemsites.aem.live",
   "devDependencies": {
     "@babel/eslint-parser": "7.24.7",
     "eslint": "8.57.0",
