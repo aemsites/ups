@@ -100,6 +100,15 @@ export function decorateMain(main) {
   decorateBlocks(main);
 }
 
+function detectFastConnection() {
+  if (window.navigator && window.navigator.connection) {
+    return window.navigator.connection.effectiveType === '4g';
+  }
+
+  /** desktop as proxy for speed */
+  return window.innerWidth >= 900;
+}
+
 /**
  * Loads everything needed to get to LCP.
  * @param {Element} doc The container element
@@ -116,7 +125,7 @@ async function loadEager(doc) {
 
   try {
     /* if desktop (proxy for fast connection) or fonts already loaded, load fonts.css */
-    if (window.innerWidth >= 900 || sessionStorage.getItem('fonts-loaded')) {
+    if (sessionStorage.getItem('fonts-loaded') || detectFastConnection()) {
       loadFonts();
     }
   } catch (e) {
