@@ -1,13 +1,21 @@
 /* stylelint-disable no-descending-specificity */
 footer {
-  padding: 2rem;
+  --footer-border-color: #8c8585;
+
+  padding: 0 20px 2rem;
   background-color: var(--brown);
   color: var(--tan);
   font-size: var(--body-font-size-s);
 }
 
+@media (width >= 900px) {
+  footer {
+    padding: 24px 60px 48px;
+  }
+}
+
 footer .footer {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: auto;
 }
 
@@ -17,6 +25,11 @@ footer .footer p {
 
 footer .footer a:any-link {
   color: var(--tan);
+  text-decoration: none;
+}
+
+footer .footer a:any-link:hover {
+  text-decoration: underline;
 }
 
 footer .footer .icon {
@@ -42,19 +55,118 @@ footer .footer ul {
   padding: 0;
 }
 
-footer .footer ul > li {
-  margin: 22px 0;
+footer .footer .nav-list .collapsible {
+  margin: 0 -20px;
+}
+
+footer .footer .nav-list .collapsible > button {
+  position: relative;
+  padding: 22px 20px;
+  display: block;
+  width: 100%;
+  text-align: left;
   color: white;
   font-size: 20px;
   font-weight: 500;
+  border-block-end: 1px solid var(--footer-border-color);
+  cursor: pointer;
 }
 
-footer .footer ul > li > ul > li {
+footer .footer .nav-list .collapsible > button::after {
+  position: absolute;
+  content: '';
+  right: 2rem;
+  top: 50%;
+  width: 11px;
+  height: 11px;
+  border-bottom: 2px solid currentcolor;
+  border-left: 2px solid currentcolor;
+  transform: translateY(-50%) rotate(315deg);
+  transition: transform 0.35s ease-in-out;
+}
+
+footer .footer .nav-list .collapsible > button[aria-expanded="true"]::after {
+  transform: translateY(-50%) rotate(135deg);
+}
+
+footer .footer .nav-list .collapsible > button + ul {
+  display: none;
+  padding: 22px 20px;
+}
+
+footer .footer .nav-list .collapsible > button[aria-expanded="true"] + ul {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  border-block-end: 1px solid var(--footer-border-color);
+}
+
+footer .footer .nav-list .collapsible > button + ul > li {
   font-size: 14px;
   font-weight: 400;
 }
 
-footer .footer ul li a {
+footer .footer .nav-list .collapsible > button + ul > li a {
   display: block;
-  padding: 22px 0;
+}
+
+footer .footer .section:last-child {
+  margin-block: 2rem;
+  font-size: 14px;
+}
+
+@media (width >= 900px) {
+  footer .footer .nav-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    justify-content: space-between;
+  }
+
+  footer .footer .section.legal .nav-list {
+    display: block;
+  }
+
+  footer .footer .nav-list .collapsible {
+    margin: 0;
+  }
+
+  footer .footer .nav-list .collapsible > button {
+    border-block-end: none;
+    cursor: default;
+  }
+
+  footer .footer .section.legal .nav-list .collapsible > button {
+    display: none;
+  }
+
+  footer .footer .nav-list .collapsible > button::after {
+    content: none;
+  }
+
+  footer .footer .nav-list .collapsible > button[aria-expanded="true"] + ul {
+    border-block-end: none;
+  }
+
+  footer .footer .section.legal {
+    margin-block-start: 40px;
+  }
+
+  footer .footer .section.legal .nav-list .collapsible > button[aria-expanded="true"] + ul {
+    flex-flow: row wrap;
+    gap: 20px;
+    border-block-start: 1px solid var(--footer-border-color);
+    padding-inline: 0;
+  }
+
+  footer .footer .section.legal .nav-list .collapsible > button + ul > li:not(:last-child) {
+    position: relative;
+  }
+
+  footer .footer .section.legal .nav-list .collapsible > button + ul > li:not(:last-child)::after {
+    content: "|";
+    position: absolute;
+    right: -12px;
+    top: 0;
+    display: inline;
+  }
 }
