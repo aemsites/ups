@@ -9,7 +9,6 @@ function toggleNavSection(navDrop, expanded) {
 }
 
 function toggleAllNavSections(navSectionContainer, expanded = false) {
-  console.log(navSectionContainer.querySelectorAll('li.collapsible'));
   navSectionContainer.querySelectorAll('li.collapsible').forEach((navSection) => {
     toggleNavSection(navSection, expanded);
   });
