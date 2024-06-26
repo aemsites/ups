@@ -499,6 +499,7 @@ header .nav-hamburger i.symbol-hamburger::after {
 }
 
 header .nav-hamburger i.symbol-hamburger {
+  background-color: currentcolor;
   transition: background-color 0.35s;
 }
 
