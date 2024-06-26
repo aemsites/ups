@@ -141,15 +141,20 @@ async function loadLazy(doc) {
   const main = doc.querySelector('main');
   await loadBlocks(main);
 
+  // promises we want to complete before lazy finished, but we don't need to wait for individually
+  const lazyPromises = [];
+
   const { hash } = window.location;
   const element = hash ? doc.getElementById(hash.substring(1)) : false;
   if (hash && element) element.scrollIntoView();
 
-  loadHeader(doc.querySelector('header'));
-  loadFooter(doc.querySelector('footer'));
+  lazyPromises.push(loadHeader(doc.querySelector('header')));
+  lazyPromises.push(loadFooter(doc.querySelector('footer')));
 
-  loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
-  loadFonts();
+  lazyPromises.push(loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`));
+  lazyPromises.push(loadFonts());
+
+  await Promise.allSettled(lazyPromises);
 
   sampleRUM('lazy');
   sampleRUM.observe(main.querySelectorAll('div[data-block-name]'));
