@@ -451,23 +451,6 @@ header .nav-support .button {
   } 
 }
 
-/* symbols */
-header i.symbol-chevron {
-  background-color: transparent;
-  transition: transform 0.35s;
-}
-
-header i.symbol-chevron::after {
-  top: 0.15em;
-  left: 0.25em;
-  width: 50%;
-  height: 50%;
-  border: 2px solid currentcolor;
-  border-left: 0;
-  border-bottom: 0;
-  transform: rotate(135deg);
-}
-
 /* backdrop */
 header .nav-backdrop {
   position: fixed;
