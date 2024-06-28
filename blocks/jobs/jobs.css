@@ -1,0 +1,108 @@
+.jobs {
+  min-height: 400px;
+}
+
+.jobs .tabs-list {
+  display: grid;
+  grid-auto-flow: row;
+}
+
+.jobs .tabs-tab {
+  position: relative;
+  display: block;
+  text-align: left;
+  padding-block: 1.5rem;
+}
+
+.jobs a.tabs-tab {
+  text-decoration: none;
+  color: currentcolor;
+}
+
+.jobs button.tabs-tab {
+  cursor: pointer;
+}
+
+.jobs button.tabs-tab::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 11px;
+  height: 11px;
+  border-bottom: 2px solid currentcolor;
+  border-left: 2px solid currentcolor;
+  transform: translateY(-50%) rotate(315deg);
+  transition: transform 0.35s ease-in-out;
+}
+
+.jobs button.tabs-tab[aria-selected="true"]::after {
+  transform: translateY(-50%) rotate(135deg);
+}
+
+.jobs .tabs-tab > * {
+  font-size: var(--heading-font-size-m);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.jobs .tabs-tab:not(:last-child) {
+  border-block-end: 1px solid currentcolor;
+}
+
+.jobs .tabs-panel[aria-hidden="true"],
+.jobs .tabs-panel[data-loaded="false"] {
+  display: none;
+}
+
+@media (width >= 900px) {
+  .jobs .tabs-list {
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+  }
+
+  .jobs .tabs-tab {
+    padding: 1rem 3rem 1rem 1.5rem;
+  }
+
+  .jobs .tabs-tab:not(:last-child) {
+    border-block-end: none;
+  }
+
+  .jobs button.tabs-tab::after {
+    content: none;
+  }
+
+  .jobs .tabs-tab > * {
+    position: relative;
+    padding-block-end: 1.25rem;
+    font-size: var(--heading-font-size-l);
+  }
+
+  .jobs .tabs-tab[aria-selected="true"] > * {
+    font-weight: 500;
+    text-shadow: 0 0 .65px currentcolor, 0 0 .65px currentcolor, 0 0 .65px currentcolor, 0 0 .65px currentcolor;
+  }
+
+  .jobs .tabs-tab > *::after {
+    content: "";
+    display: block;
+    width: 0;
+    opacity: 0;
+    height: 0.25rem;
+    background-color: var(--gold);
+    border: none;
+    transition: all 0.35s ease-in-out;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .jobs .tabs-tab:focus > *::after,
+  .jobs .tabs-tab:hover > *::after,
+  .jobs .tabs-tab[aria-selected="true"] > *::after {
+    width: 100%;
+    opacity: 1;
+  }
+}
