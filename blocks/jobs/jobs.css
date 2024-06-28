@@ -10,6 +10,7 @@
   position: relative;
   display: block;
   text-align: left;
+  color: inherit;
 }
 
 .jobs a.tabs-tab {
