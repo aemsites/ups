@@ -1,4 +1,4 @@
-import { getMetadata } from '../../scripts/aem.js';
+import { getMetadata, loadCSS, loadScript } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
 
 // media query match that indicates desktop width
@@ -63,9 +63,31 @@ function wrapAnchorText(a) {
 //   // location locator functionality
 // }
 
-// function toggleSearch(e) {
-//   // search functionality
-// }
+async function buildSearch(wrapper, button) {
+  // decorate search button
+  const close = buildSymbol('close');
+  button.append(close);
+  button.setAttribute('aria-controls', 'search-modal');
+  // build search form
+  const searchPath = '/blocks/header/search';
+  const resp = await fetch(`${searchPath}/index.html`);
+  const search = document.createElement('form');
+  search.id = 'search-modal';
+  search.innerHTML = await resp.text();
+  await loadCSS(`${searchPath}/styles.css`);
+  wrapper.append(search);
+  await loadScript(`${searchPath}/scripts.js`, { type: 'module' });
+  return search;
+}
+
+async function toggleSearch(e) {
+  const button = e.target.closest('button');
+  let search = document.getElementById('search-modal');
+  if (!search) search = await buildSearch(e.target.closest('li'), button);
+  const expanded = button.getAttribute('aria-expanded') === 'true';
+  button.setAttribute('aria-expanded', !expanded);
+  if (!expanded) search.querySelector('input[type="search"]').focus();
+}
 
 function toggleLanguagePicker(e) {
   const button = e.srcElement;
@@ -195,7 +217,7 @@ export default async function decorate(block) {
       const button = buildButton('search');
       button.setAttribute('aria-label', 'Search');
       button.append(search);
-      // button.addEventListener('click', toggleSearch);
+      button.addEventListener('click', toggleSearch);
       wrapper.innerHTML = '';
       wrapper.append(button);
     }

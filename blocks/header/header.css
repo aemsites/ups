@@ -276,6 +276,16 @@ header .nav-tools a.button .symbol.symbol-chevron {
   transform: rotate(-90deg);
 }
 
+header .nav-tools button .icon,
+header .nav-tools button .symbol {
+  font-size: var(--heading-font-size-m);
+}
+
+header .nav-tools button[aria-expanded='true'] .icon,
+header .nav-tools button[aria-expanded='false'] .symbol {
+  display: none;
+}
+
 @media (width >= 700px) {
   header .nav-tools a.button {
     padding: 0.625rem 1.5rem;
