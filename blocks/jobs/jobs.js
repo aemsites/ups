@@ -5,9 +5,10 @@ import {
 const isDesktop = window.matchMedia('(width >= 900px)');
 
 async function decorateTabPanel(tabPanel) {
-  if (tabPanel.dataset.loaded === 'true') {
+  if (tabPanel.dataset.status === 'loaded' || tabPanel.dataset.status === 'loading') {
     return;
   }
+  tabPanel.dataset.status = 'loading';
 
   // load fragments
   const fragments = tabPanel.querySelectorAll('a[href*="/fragments/"]:only-child');
@@ -25,9 +26,63 @@ async function decorateTabPanel(tabPanel) {
     await loadBlock(fragment);
   }));
 
-  // create columns for any additional content
+  tabPanel.dataset.status = 'loaded';
+}
 
-  tabPanel.dataset.loaded = true;
+async function updateActivePanel(block, idx) {
+  let tabLoadingPromise;
+  block.querySelectorAll('.tabs-panel').forEach((tabPanel, i) => {
+    tabPanel.classList.remove('active');
+    const isActive = idx === i;
+    if (isActive) {
+      tabPanel.classList.add('active');
+      tabLoadingPromise = decorateTabPanel(tabPanel);
+    }
+
+    if (isDesktop.matches) {
+      tabPanel.setAttribute('aria-hidden', !isActive);
+    } else {
+      const panelControlButton = tabPanel.querySelector('.tabs-panel-header button');
+      if (panelControlButton) {
+        panelControlButton.setAttribute('aria-expanded', isActive);
+      }
+    }
+  });
+
+  block.querySelectorAll('.tabs-list .tabs-tab').forEach((tab, i) => {
+    tab.setAttribute('aria-selected', idx === i);
+  });
+
+  if (tabLoadingPromise) {
+    await tabLoadingPromise;
+  }
+}
+
+async function toggleActivePanel(block, tabPanel, idx) {
+  const isActive = tabPanel.classList.contains('active');
+  if (isActive) {
+    // just make all panels inactive
+    await updateActivePanel(block, -1);
+  } else {
+    await updateActivePanel(block, idx);
+  }
+}
+
+function updatePanelAttributes(panel) {
+  if (isDesktop.matches) {
+    panel.setAttribute('aria-hidden', !panel.classList.contains('active'));
+    panel.querySelector('.tabs-panel-content').removeAttribute('aria-hidden');
+    panel.setAttribute('role', 'tabpanel');
+    panel.setAttribute('aria-labelledby', panel.dataset.labelledby);
+  } else {
+    panel.removeAttribute('aria-hidden');
+    const panelControlButton = panel.querySelector('.tabs-panel-header button');
+    if (panelControlButton) {
+      panelControlButton.setAttribute('aria-expanded', panel.classList.contains('active'));
+    }
+    panel.removeAttribute('role');
+    panel.removeAttribute('aria-labelledby');
+  }
 }
 
 /**
@@ -41,69 +96,84 @@ export default async function decorate(block) {
   tablist.setAttribute('role', 'tablist');
 
   [...block.children].forEach((tab, idx) => {
-    const [tabButton, tabPanel] = [...tab.children];
+    const tabButton = tab.children.item(0);
+    const tabPanel = tab.children.item(1) || document.createElement('div');
     const id = toClassName(tabButton.textContent);
+    tabPanel.className = 'tabs-panel';
+    tabPanel.id = `tabpanel-${id}`;
+    block.append(tabPanel);
+
+    const tabPanelContent = document.createElement('div');
+    tabPanelContent.id = `tabpanel-${id}-content`;
+    tabPanelContent.className = 'tabs-panel-content';
+    const panelContentInner = document.createElement('div');
+    panelContentInner.className = 'tabs-panel-content-inner';
+    panelContentInner.append(...tabPanel.children);
+    tabPanelContent.append(panelContentInner);
+    tabPanel.append(tabPanelContent);
+
+    const tabPanelHeader = document.createElement('div');
+    tabPanelHeader.className = 'tabs-panel-header';
+    tabPanel.prepend(tabPanelHeader);
+
     if (tabButton.querySelector('a') && (!tabPanel || !tabPanel.textContent)) {
       let buttonContent = tabButton.firstElementChild;
       // buttonContent is likely a link inside of an h2 (or similar).
-      // need to reverse order so the "action" elements are the first level childeen of the tablist
+      // need to reverse order so the "action" elements are the first level children of the tablist
       const link = buttonContent.firstElementChild;
       if (link.tagName === 'A') {
         const clonedLink = link.cloneNode(true);
         const linkText = clonedLink.textContent;
         const clonedH2 = buttonContent.cloneNode(false);
+        clonedH2.className = 'tabs-tab-title';
         clonedH2.textContent = linkText;
         clonedLink.replaceChildren(clonedH2);
         buttonContent = clonedLink;
       }
       buttonContent.className = 'tabs-tab';
       tablist.append(buttonContent);
+      tabPanel.classList.add('tabs-panel-no-content');
+      tabPanelHeader.append(buttonContent.cloneNode(true));
     } else {
       // build tab button
       const button = document.createElement('button');
       button.className = 'tabs-tab';
       button.id = `tab-${id}`;
+      tabButton.firstElementChild.className = 'tabs-tab-title';
       button.append(tabButton.firstElementChild);
       button.setAttribute('aria-controls', `tabpanel-${id}`);
       button.setAttribute('aria-selected', idx === 0);
       button.setAttribute('role', 'tab');
       button.setAttribute('type', 'button');
       button.addEventListener('click', () => {
-        const expanded = button.getAttribute('aria-selected') === 'true';
-        decorateTabPanel(tabPanel);
-        block.querySelectorAll('[role=tabpanel]').forEach((panel) => {
-          panel.setAttribute('aria-hidden', true);
-        });
-        tablist.querySelectorAll('button').forEach((btn) => {
-          btn.setAttribute('aria-selected', false);
-        });
-        const shouldExpand = isDesktop.matches ? true : !expanded;
-        button.setAttribute('aria-selected', shouldExpand);
-        tabPanel.setAttribute('aria-hidden', !shouldExpand);
+        updateActivePanel(block, idx);
       });
       tablist.append(button);
 
-      // decorate tabpanel
-      tabPanel.className = 'tabs-panel';
-      tabPanel.id = `tabpanel-${id}`;
-      tabPanel.setAttribute('aria-hidden', idx !== 0);
-      tabPanel.setAttribute('aria-labelledby', `tab-${id}`);
-      tabPanel.setAttribute('role', 'tabpanel');
-      tabPanel.dataset.loaded = false;
+      const clonedButton = button.cloneNode(true);
+      clonedButton.removeAttribute('role');
+      clonedButton.removeAttribute('id');
+      clonedButton.removeAttribute('aria-selected');
+      clonedButton.setAttribute('aria-controls', `tabpanel-${id}-content`);
+      clonedButton.addEventListener('click', () => {
+        toggleActivePanel(block, tabPanel, idx);
+      });
+      tabPanelHeader.append(clonedButton);
 
-      block.append(tabPanel);
+      tabPanel.dataset.labelledby = `tab-${id}`;
+      tabPanel.dataset.status = 'initialized';
     }
     tab.remove();
   });
+  block.prepend(tablist);
 
-  tablist.setAttribute('aria-orientation', isDesktop.matches ? 'horizontal' : 'vertical');
   isDesktop.addEventListener('change', () => {
-    tablist.setAttribute('aria-orientation', isDesktop.matches ? 'horizontal' : 'vertical');
-    if (!block.querySelector('[role=tabpanel][aria-hidden=false]')) {
-      tablist.querySelector('[role=tab]').click();
+    document.querySelectorAll('.tabs-panel').forEach(updatePanelAttributes);
+    if (isDesktop.matches && !block.querySelector('.tabs-panel.active')) {
+      updateActivePanel(block, 0);
     }
   });
+  document.querySelectorAll('.tabs-panel').forEach(updatePanelAttributes);
 
-  await decorateTabPanel(block.querySelector('[role=tabpanel][aria-hidden=false]'));
-  block.prepend(tablist);
+  await updateActivePanel(block, 0);
 }

@@ -81,6 +81,7 @@ footer .footer .nav-list .collapsible > button::after {
   height: 11px;
   border-bottom: 2px solid currentcolor;
   border-left: 2px solid currentcolor;
+  border-radius: 2px;
   transform: translateY(-50%) rotate(315deg);
   transition: transform 0.35s ease-in-out;
 }
