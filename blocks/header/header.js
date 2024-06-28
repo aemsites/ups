@@ -1,4 +1,4 @@
-import { getMetadata } from '../../scripts/aem.js';
+import { getMetadata, loadCSS, loadScript } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
 
 // media query match that indicates desktop width
@@ -43,7 +43,7 @@ function toggleHamburger(hamburger, nav) {
 function buildButton(id) {
   const button = document.createElement('button');
   button.setAttribute('type', 'button');
-  button.id = id;
+  if (id) button.id = id;
   return button;
 }
 
@@ -59,9 +59,24 @@ function wrapAnchorText(a) {
   a.innerHTML = `${icon.outerHTML}<span class="text">${text}</span>`;
 }
 
-// function openLocator(e) {
-//   // location locator functionality
-// }
+async function buildLocator() {
+  const locatorPath = '/blocks/header/locator';
+  const resp = await fetch(`${locatorPath}/index.html`);
+  const locator = document.createElement('aside');
+  locator.id = 'locator-modal';
+  locator.innerHTML = await resp.text();
+  await loadCSS(`${locatorPath}/styles.css`);
+  document.body.append(locator);
+  await loadScript(`${locatorPath}/scripts.js`, { type: 'module' });
+  return locator;
+}
+
+async function openLocator() {
+  let locator = document.getElementById('locator-modal');
+  if (!locator) locator = await buildLocator();
+  document.body.dataset.scroll = 'disabled';
+  locator.setAttribute('aria-hidden', false);
+}
 
 // function toggleSearch(e) {
 //   // search functionality
@@ -209,7 +224,7 @@ export default async function decorate(block) {
     wrapAnchorText(button);
     const chevron = buildSymbol('chevron');
     button.append(chevron);
-    // button.addEventListener('click', openLocator);
+    button.addEventListener('click', openLocator);
     location.innerHTML = '';
     location.append(button);
   }
