@@ -10,6 +10,10 @@ async function decorateTabPanel(tabPanel) {
   }
   tabPanel.dataset.status = 'loading';
 
+  if (tabPanel.querySelector('img')) {
+    tabPanel.classList.add('has-hero-img');
+  }
+
   // load fragments
   const fragments = tabPanel.querySelectorAll('a[href*="/fragments/"]:only-child');
   await Promise.all([...fragments].map(async (a) => {

@@ -1,5 +1,6 @@
 .jobs {
   min-height: 400px;
+  position: relative;
 }
 
 .jobs .tabs-list {
@@ -85,6 +86,10 @@
   overflow: hidden;
 }
 
+.jobs .tabs-panel .tabs-panel-content .tabs-panel-content-inner > .img-wrapper {
+  display: none;
+}
+
 .jobs .tabs-panel.tabs-panel-no-content .tabs-panel-content {
   display: none;
 }
@@ -94,6 +99,7 @@
     display: grid;
     grid-auto-flow: column;
     grid-auto-columns: max-content;
+    padding-block-start: 5rem;
   }
 
   .jobs .tabs-tab {
@@ -137,7 +143,21 @@
     border-block-end: none;
   }
 
-  .jobs .tabs-panel-header {
+  .jobs .tabs-panel-header,
+  .jobs .tabs-panel[aria-hidden="true"] {
     display: none;
+  }
+
+  .jobs .tabs-panel.has-hero-img .tabs-panel-content .tabs-panel-content-inner {
+    max-width: calc(100% - 400px - 1rem);
+  }
+
+  .jobs .tabs-panel .tabs-panel-content .tabs-panel-content-inner > .img-wrapper {
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    max-width: 400px;
+    max-height: 400px;
   }
 }
