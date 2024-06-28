@@ -51,6 +51,9 @@
 
   /* header height */
   --header-height: 108px;
+
+  /* content container width */
+  --max-content-width: 1400px;
 }
 
 /* fallback fonts */
@@ -88,15 +91,15 @@ header {
   min-height: var(--header-height);
 }
 
-main {
-  max-width: 1400px;
-  margin: auto;
-}
-
 /* sections */
 main > .section {
-  max-width: 1400px;
-  margin: 5rem 1.5rem;
+ padding-inline: 1.5rem;
+ margin-block: 5rem;
+}
+
+main > .section > div {
+  max-width: var(--max-content-width);
+  margin-inline: auto;
 }
 
 /* images and icons */
@@ -374,6 +377,40 @@ main .section.light {
 main .section.dark {
   padding: 1.5rem;
   background-color: darkgray;
+}
+
+main .section.background-brown {  
+  position: relative;
+  background: var(--brown-gradient);
+  color: white;
+}
+
+main .section.background-brown::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  max-height: 200px;
+  height: calc(((100vw / 768) * 72) + 1px);
+  background: var(--background-color);
+  mask-image: url('/icons/bg-arc-mask.svg');
+  mask-repeat: no-repeat;
+  mask-position: bottom left;
+  mask-size: cover;
+}
+
+main .section.background-arc {
+  background: url('/icons/background-arc.svg') no-repeat left bottom;
+  background-size: 100% auto;
+  margin-block: 1rem;
+  padding-block: 1rem 4rem;
+}
+
+@media (width >= 900px) {
+  main .section.background-brown::after {
+    height: calc(((100vw / 1440) * 72) + 1px);
+  }
 }
 
 main .section.cta {
