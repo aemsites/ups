@@ -1,0 +1,128 @@
+<p class="button-wrapper">
+  <button id="locator-close" class="button ghost" type="button" aria-label="Close">
+    <i class="symbol symbol-close"></i>
+  </button>
+</p>
+<h2><u>Find a UPS Location</u></h2>
+<form id="locator-form" autocomplete="off">
+  <div class="field-wrapper">
+    <button type="button" id="locator-current-location" aria-label="Use My Current Location">
+      <span class="icon icon-reticle"><img src="/icons/reticle.svg" alt=""></span>
+    </button>
+    <div class="form-field search-field">
+      <input name="locator-search" id="locator-search" type="search" placeholder="">
+      <label for="locator-search">Enter Address</label>
+      <button type="button" id="locator-clear" aria-label="Clear Search">
+        <i class="symbol symbol-close"></i>
+      </button>
+      <ul id="locator-autosuggest" style="display: none;">
+        <li aria-hidden="true">
+          <button type="button" disabled>
+            <span class="icon icon-pin-filled">
+              <img src="/icons/pin-filled.svg" alt="">
+            </span>
+            <p></p>
+          </button>
+        </li>
+        <li aria-hidden="true">
+          <button type="button" disabled>
+            <span class="icon icon-pin-filled">
+              <img src="/icons/pin-filled.svg" alt="">
+            </span>
+            <p></p>
+          </button>
+        </li>
+        <li aria-hidden="true">
+          <button type="button" disabled>
+            <span class="icon icon-pin-filled">
+              <img src="/icons/pin-filled.svg" alt="">
+            </span>
+            <p></p>
+          </button>
+        </li>
+        <li aria-hidden="true">
+          <button type="button" disabled>
+            <span class="icon icon-pin-filled">
+              <img src="/icons/pin-filled.svg" alt="">
+            </span>
+            <p></p>
+          </button>
+        </li>
+        <li class="attribution">
+          <span class="icon icon-bing">
+            <img src="/icons/bing.svg" alt="Powered by Bing">
+          </span>
+        </li>
+      </ul>
+    </div>
+    <button type="submit" id="locator-submit" aria-label="Look Up" class="button">
+      <span class="icon icon-search"><img src="/icons/search.svg" alt=""></span>
+    </button>
+  </div>
+  <div class="form-field filter-field">
+    <button type="button" id="locator-filter" class="button ghost" aria-expanded="false" aria-controls="filter-options">
+      <span>Filter By</span>
+      <i class="symbol symbol-chevron"></i>
+    </button>
+    <fieldset id="filter-options">
+      <legend>Location Type</legend>
+      <ul>
+        <li class="form-field checkbox-field">
+          <label for="all-locations">All Locations
+            <input type="checkbox" name="location-type" id="all-locations" checked>
+            <span class="checkbox"></span>
+          </label>
+        </li>
+        <li class="form-field checkbox-field">
+          <label>The UPS Store®
+            <input type="checkbox" name="location-type" checked>
+            <span class="checkbox"></span>
+          </label>
+        </li>
+        <li class="form-field checkbox-field">
+          <label>UPS Access Point™
+            <input type="checkbox" name="location-type" checked>
+            <span class="checkbox"></span>
+          </label>
+        </li>
+        <li class="form-field checkbox-field">
+          <label>UPS Drop Box
+            <input type="checkbox" name="location-type" checked>
+            <span class="checkbox"></span>
+          </label>
+        </li>
+        <li class="form-field checkbox-field">
+          <label>UPS Customer Center
+            <input type="checkbox" name="location-type" checked>
+            <span class="checkbox"></span>
+          </label>
+        </li>
+        <li class="form-field checkbox-field">
+          <label>Retail Chains
+            <input type="checkbox" name="location-type" checked>
+            <span class="checkbox"></span>
+          </label>
+        </li>
+        <li class="form-field checkbox-field">
+          <label>Authorized Shipping Outlet
+            <input type="checkbox" name="location-type" checked>
+            <span class="checkbox"></span>
+          </label>
+        </li>
+        <li class="form-field checkbox-field">
+          <label>UPS Authorized Service Providers
+            <input type="checkbox" name="location-type" checked>
+            <span class="checkbox"></span>
+          </label>
+        </li>
+      </ul>
+    </fieldset>
+  </div>
+</form>
+<section class="locator-results">
+  <div class="locator-map" aria-hidden="true"></div>
+  <p class="no-results" aria-hidden="true">No Results Found</p>
+  <p class="more-results button-wrapper" aria-hidden="true">
+    <button id="locator-more-results" type="button" class="button ghost">Show More Locations</button>
+  </p>
+</section>
