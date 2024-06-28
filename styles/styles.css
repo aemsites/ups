@@ -13,10 +13,12 @@
 :root {
   /* tokens */
   --gray: #5f5753;
-  --gray-light: #dfdbd7;
+  --gray-light: #8c857e;
+  --gray-lighter: #f2f1ef;
   --brown: #351c15;
   --tan: #bfb8af;
   --tan-light: #f2f1ef;
+  --tan-lighter: #dfdbd7;
   --brown-gradient: linear-gradient(18.83deg, #7e5844 37.21%, #69422d 100%);
   --gold: #ffc400;
   --gold-light: #ffd64c;
@@ -116,7 +118,7 @@ img {
 .icon svg,
 .icon img {
   display: inline-block;
-  width: 1em;
+  width: auto;
   height: 1em;
   fill: currentcolor;
   color: currentcolor;
@@ -135,6 +137,20 @@ i.symbol::before,
 i.symbol::after {
   content: '';
   position: absolute;
+}
+
+i.symbol-close::after,
+i.symbol-close::before {
+  top: calc(50% - 1px);
+  left: 0;
+  transform: rotate(45deg);
+  width: 100%;
+  height: 2px;
+  background-color: currentcolor;
+}
+
+i.symbol-close::after {
+  transform: rotate(-45deg);
 }
 
 /* typography */
@@ -357,7 +373,22 @@ input,
 textarea,
 select {
   width: 100%;
+  border: 2px solid var(--gray-light);
+  border-radius: 0.25rem;
+  padding: 0.75rem;
   color: inherit;
+  transition: outline 0.35s;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 1px solid var(--gray-light);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--gray-light);
 }
 
 button,
@@ -444,7 +475,7 @@ main .section.link-list a:hover::after {
 }
 
 main .section.link-list ul li + li {
-  border-top: 1px solid var(--gray-light);
+  border-top: 1px solid var(--tan-lighter);
 }
 
 @media (width >= 700px) {
