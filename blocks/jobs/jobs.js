@@ -135,9 +135,15 @@ export default async function decorate(block) {
         buttonContent = clonedLink;
       }
       buttonContent.className = 'tabs-tab';
+      buttonContent.setAttribute('role', 'tab');
+      buttonContent.id = `tab-${id}`;
       tablist.append(buttonContent);
       tabPanel.classList.add('tabs-panel-no-content');
-      tabPanelHeader.append(buttonContent.cloneNode(true));
+      const clonedButton = buttonContent.cloneNode(true);
+      clonedButton.removeAttribute('role');
+      clonedButton.removeAttribute('id');
+      tabPanelHeader.append(clonedButton);
+      tabPanel.dataset.labelledby = `tab-${id}`;
     } else {
       // build tab button
       const button = document.createElement('button');
